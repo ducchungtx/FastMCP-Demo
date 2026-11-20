@@ -7,7 +7,7 @@
 
 ---
 
-Demo MCP server built with [FastMCP](https://gofastmcp.com): mock document read/edit tools, connectable from Cursor, VS Code / Copilot, or a Python client.
+Demo MCP server built with [FastMCP](https://gofastmcp.com): mock document store (read/edit tools + read-only resources), connectable from Cursor, VS Code / Copilot, or a Python client.
 
 ## Requirements
 
@@ -28,7 +28,24 @@ make version   # verify FastMCP / MCP SDK
 | `read_doc_contents` | Read document content by `doc_id` |
 | `edit_doc_contents` | Replace text in a document (`old_str` → `new_str`) |
 
-Sample docs: `plan.md`, `report.pdf`, `spec.txt`, …
+Sample docs: `deposition.md`, `report.pdf`, `financials.docx`, `outlook.pdf`, `plan.md`, `spec.txt`.
+
+## Available resources
+
+| URI | Mime | Description |
+|-----|------|-------------|
+| `docs://documents` | `application/json` | List all `doc_id` values |
+| `docs://documents/{doc_id}` | `text/plain` | Read one document’s content |
+
+Concrete URI examples: `docs://documents/plan.md`, `docs://documents/report.pdf`.
+
+| | Tool | Resource |
+|---|------|----------|
+| How you address it | Tool name + args (`doc_id`, …) | URI like an address (`docs://…`) |
+| Best for | Read **and** write (side effects) | Read-only content |
+| In Cursor | Agent calls the tool on request | Agent calls `FetchMcpResource` with the URI |
+
+> A resource is **not** a browser URL. The host connects over MCP and sends `resources/read` with the URI.
 
 ## Quick commands (Makefile)
 
@@ -69,7 +86,13 @@ File: [`.cursor/mcp.json`](.cursor/mcp.json) (both servers are already defined):
 
 In Cursor: **Settings → MCP** → enable a server (test **one** at a time to avoid duplicate tools).
 
-Try in chat: *“read plan.md using the tool”*.
+Try in chat:
+
+- Tool: *“read plan.md using the tool”*
+- Resource list: *`docs://documents`* or *“list documents via resource”*
+- One file: *`docs://documents/plan.md`* or *“contents of docs://documents/plan.md”*
+
+The agent will call MCP (tool or `FetchMcpResource`) — no need to open a link in the browser.
 
 ## VS Code / Copilot configuration
 
@@ -97,7 +120,7 @@ uv run fastmcp call my_server.py read_doc_contents --input-json '{"doc_id":"plan
 ## Project layout
 
 ```
-my_server.py      # FastMCP server + tools
+my_server.py      # FastMCP server: tools + resources
 my_client.py      # Client demo (in-process / HTTP)
 Makefile          # Common commands
 .cursor/mcp.json  # Cursor config (stdio + HTTP)
@@ -109,6 +132,7 @@ README.en.md      # English
 ## References
 
 - [FastMCP Quickstart](https://gofastmcp.com/docs/getting-started/quickstart)
+- [FastMCP Resources](https://gofastmcp.com/servers/resources)
 - [FastMCP Client](https://gofastmcp.com/docs/clients/client)
 - [Install into Cursor / Claude / …](https://gofastmcp.com/docs/cli/install-mcp)
 - [HTTP deployment](https://gofastmcp.com/docs/deployment/http)

@@ -49,7 +49,7 @@ def edit_document(
 
 @mcp.resource(
     "docs://documents",
-    mime_type="application/json",
+    mime_type="application/json"
 )
 def list_docs() -> list[str]:
     return list(docs.keys())

@@ -7,7 +7,7 @@
 
 ---
 
-Demo MCP server bằng [FastMCP](https://gofastmcp.com): quản lý nội dung tài liệu giả lập (đọc / sửa), kết nối từ Cursor, VS Code / Copilot, hoặc client Python.
+Demo MCP server bằng [FastMCP](https://gofastmcp.com): quản lý nội dung tài liệu giả lập (tools đọc/sửa + resources chỉ đọc), kết nối từ Cursor, VS Code / Copilot, hoặc client Python.
 
 ## Yêu cầu
 
@@ -28,7 +28,24 @@ make version   # kiểm tra FastMCP / MCP SDK
 | `read_doc_contents` | Đọc nội dung document theo `doc_id` |
 | `edit_doc_contents` | Thay thế chuỗi trong document (`old_str` → `new_str`) |
 
-Document mẫu: `plan.md`, `report.pdf`, `spec.txt`, …
+Document mẫu: `deposition.md`, `report.pdf`, `financials.docx`, `outlook.pdf`, `plan.md`, `spec.txt`.
+
+## Resources hiện có
+
+| URI | Mime | Mô tả |
+|-----|------|--------|
+| `docs://documents` | `application/json` | Liệt kê tất cả `doc_id` |
+| `docs://documents/{doc_id}` | `text/plain` | Đọc nội dung một document |
+
+Ví dụ URI cụ thể: `docs://documents/plan.md`, `docs://documents/report.pdf`.
+
+| | Tool | Resource |
+|---|------|----------|
+| Cách gọi | Tên tool + tham số (`doc_id`, …) | URI kiểu địa chỉ (`docs://…`) |
+| Phù hợp | Đọc **và** sửa (có side-effect) | Chỉ đọc nội dung |
+| Trong Cursor | Agent gọi tool khi bạn yêu cầu | Agent gọi `FetchMcpResource` với URI |
+
+> Resource **không** phải URL trình duyệt. Host kết nối MCP rồi gửi `resources/read` kèm URI.
 
 ## Chạy nhanh (Makefile)
 
@@ -69,7 +86,13 @@ File: [`.cursor/mcp.json`](.cursor/mcp.json) (đã có sẵn cả hai server):
 
 Trong Cursor: **Settings → MCP** → bật server (nên test **một** server tại một thời điểm để tránh trùng tool).
 
-Chat thử: *“đọc nội dung plan.md bằng tool”*.
+Chat thử:
+
+- Tool: *“đọc nội dung plan.md bằng tool”*
+- Resource list: *`docs://documents`* hoặc *“list documents qua resource”*
+- Resource một file: *`docs://documents/plan.md`* hoặc *“nội dung của docs://documents/plan.md”*
+
+Agent sẽ gọi MCP (tool hoặc `FetchMcpResource`) — không cần mở link trên browser.
 
 ## Cấu hình VS Code / Copilot
 
@@ -97,7 +120,7 @@ uv run fastmcp call my_server.py read_doc_contents --input-json '{"doc_id":"plan
 ## Cấu trúc chính
 
 ```
-my_server.py      # FastMCP server + tools
+my_server.py      # FastMCP server: tools + resources
 my_client.py      # Client demo (in-process / HTTP)
 Makefile          # Lệnh thường dùng
 .cursor/mcp.json  # Config Cursor (stdio + HTTP)
@@ -109,6 +132,7 @@ README.en.md      # English
 ## Tài liệu tham khảo
 
 - [FastMCP Quickstart](https://gofastmcp.com/docs/getting-started/quickstart)
+- [FastMCP Resources](https://gofastmcp.com/servers/resources)
 - [FastMCP Client](https://gofastmcp.com/docs/clients/client)
 - [Install vào Cursor / Claude / …](https://gofastmcp.com/docs/cli/install-mcp)
 - [HTTP deployment](https://gofastmcp.com/docs/deployment/http)
