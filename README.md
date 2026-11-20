@@ -1,5 +1,12 @@
 # MCP Quickstart (FastMCP Demo)
 
+[![vi](https://img.shields.io/badge/lang-Tiếng_Việt-DA251D?style=flat-square)](README.md)
+[![en](https://img.shields.io/badge/lang-English-0A66C2?style=flat-square&logo=googletranslate&logoColor=white)](README.en.md)
+
+**Ngôn ngữ:** [🇻🇳 Tiếng Việt](README.md) · [🇬🇧 English](README.en.md)
+
+---
+
 Demo MCP server bằng [FastMCP](https://gofastmcp.com): quản lý nội dung tài liệu giả lập (đọc / sửa), kết nối từ Cursor, VS Code / Copilot, hoặc client Python.
 
 ## Yêu cầu
@@ -95,6 +102,8 @@ my_client.py      # Client demo (in-process / HTTP)
 Makefile          # Lệnh thường dùng
 .cursor/mcp.json  # Config Cursor (stdio + HTTP)
 .vscode/mcp.json  # Config VS Code / Copilot
+README.md         # Tiếng Việt
+README.en.md      # English
 ```
 
 ## Tài liệu tham khảo
