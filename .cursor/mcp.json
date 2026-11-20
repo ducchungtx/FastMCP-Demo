@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "My MCP Server (stdio local)": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--project",
+        "/Users/chungnguyen/Desktop/Projects/AI/MCP",
+        "--with",
+        "fastmcp",
+        "fastmcp",
+        "run",
+        "/Users/chungnguyen/Desktop/Projects/AI/MCP/my_server.py:mcp"
+      ]
+    },
+    "My MCP Server (remote HTTP)": {
+      "url": "http://127.0.0.1:8000/mcp"
+    }
+  }
+}

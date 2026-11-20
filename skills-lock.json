@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "skills": {
+    "fastmcp-server": {
+      "source": "gofastmcp.com",
+      "sourceUrl": "https://gofastmcp.com",
+      "sourceType": "well-known",
+      "computedHash": "701b9aa01d0e0b8b54f0444a1bc3aacb606af339c1044d312e9acef80cbbfde6",
+      "wellKnownDigest": "sha256:0f25e00320a7a4bf16ecd16475c6d237f1e3057925e06c306ba051de0f9af509"
+    }
+  }
+}
