@@ -47,6 +47,22 @@ def edit_document(
     docs[doc_id] = content.replace(old_str, new_str)
     return docs[doc_id]
 
+@mcp.resource(
+    "docs://documents",
+    mime_type="application/json",
+)
+def list_docs() -> list[str]:
+    return list(docs.keys())
+
+@mcp.resource(
+    "docs://documents/{doc_id}",
+    mime_type="text/plain",
+)
+def fetch_doc(doc_id: str) -> str:
+    if doc_id not in docs:
+        raise ValueError(f"Document '{doc_id}' not found. ")
+    return docs[doc_id]
+
 if __name__ == "__main__":
     # 0.0.0.0 = nhận kết nối từ máy khác trong LAN (remote nội bộ)
     # Endpoint MCP: http://<ip-máy-này>:8000/mcp
